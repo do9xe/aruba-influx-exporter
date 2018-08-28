@@ -49,15 +49,15 @@ for switch in radioDataPerSwitch:
 json_body = []
 for Name in apData:
   data = apData[Name]
-    json_body.append({
-                    "measurement": "AP_Data",
-                    "fields": data,
-                    "tags": {
-                      "host": data["Name"],
-                      "group":data["Group"],
-                      "ap_type":data["AP Type"],
-                      "status":data["Status"]
-                    }})
+  json_body.append({
+                  "measurement": "AP_Data",
+                  "fields": data,
+                  "tags": {
+                    "host": data["Name"],
+                    "group":data["Group"],
+                    "ap_type":data["AP Type"],
+                    "status":data["Status"]
+                  }})
 
 InfluxClient = InfluxDBClient(InfluxIp, InfluxPort, InfluxUser, InfluxPassword, InfluxDbName)
 InfluxClient.write_points(json_body)
