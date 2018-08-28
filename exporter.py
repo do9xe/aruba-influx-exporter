@@ -11,18 +11,30 @@ apData = {}
 
 MM = api_session(MM_IP, USER, PASSWORD, False)
 MM.login()
+if DEBUG:
+  print("requesting switch-data...")
 switchList = MM.cli_command("show switches")
+if DEBUG:
+  print("requesting ap database...")
 apDatabase = MM.cli_command("show ap database")
 MM.logout()
 
+if DEBUG:
+  print("Goind through all the switches")
 for switch in switchList["All Switches"]:
   if switch["Model"] != "ArubaMM-VA" and switch["Status"] == "up":
     tmpSession = api_session(switch["IP Address"], USER, PASSWORD, False)
     tmpSession.login()
+    if DEBUG:
+      print("requesting active APs from" + str(switch["IP Address"]))
     apActivePerSwitch[str(switch["IP Address"])] = tmpSession.cli_command("show ap active")
+    if DEBUG:
+      print("requesting Radio-summary from" + str(switch["IP Address"]))
     radioDataPerSwitch[str(switch["IP Address"])] = tmpSession.cli_command("show ap radio-summary")
     tmpSession.logout()
 
+if DEBUG:
+  print("calculating and merging all data")
 for ap in apDatabase["AP Database"]:
   apData[ap["Name"]] = ap
   apData[ap["Name"]]["11g Clients"] = 0
@@ -58,6 +70,9 @@ for Name in apData:
                     "ap_type":data["AP Type"],
                     "status":data["Status"]
                   }})
+
+if DEBUG:
+  print("pushing Data to influxDB")
 
 InfluxClient = InfluxDBClient(InfluxIp, InfluxPort, InfluxUser, InfluxPassword, InfluxDbName)
 InfluxClient.write_points(json_body)
