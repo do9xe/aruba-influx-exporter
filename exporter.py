@@ -74,7 +74,7 @@ for switch in apActivePerSwitch:
       if tmpRadioData1[1].startswith("2.4") and tmpRadioData1[0].startswith("AP"):
         apData[activeAP["Name"]]["11g Clients"] += int(tmpRadioData2[3])
       #if it is 5GHz we add it to the 5GHz Counter
-      else:
+      elif tmpRadioData1[0].startswith("AP"):
         apData[activeAP["Name"]]["11a Clients"] += int(tmpRadioData2[3])
     #write the data for this radio to the dict
     #if the radio does not exsist in this dict it is supposed to be None
@@ -102,7 +102,7 @@ for switch in apActivePerSwitch:
       if tmpRadioData1[1].startswith("2.4") and tmpRadioData1[0].startswith("AP"):
         apData[activeAP["Name"]]["11g Clients"] += int(tmpRadioData2[3])
       #if it is 5GHz we add it to the 5GHz Counter
-      else:
+      elif tmpRadioData1[0].startswith("AP"):
         apData[activeAP["Name"]]["11a Clients"] += int(tmpRadioData2[3])
 
 
