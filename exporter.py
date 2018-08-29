@@ -55,6 +55,13 @@ for switch in apActivePerSwitch:
       tmpRadioData1 = activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
       #we take Channel, EIRP, MaxEIRP an Clients and split it by /
       tmpRadioData2 = tmpRadioData1[2].split("/")
+      if DEBUG:
+        print("Radio 0 Band Ch/EIRP/MaxEIRP/Clients:")
+        print(activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"])
+        print("tmpRadioData1:")
+        print(tmpRadioData1)
+        print("tmpRadioData2:")
+        print(tmpRadioData2)
       #we save the data to the dich
       apData[activeAP["Name"]]["Radio0 channel"] = tmpRadioData2[0]
       apData[activeAP["Name"]]["Radio0 EIRP"] = tmpRadioData2[1]
@@ -72,6 +79,13 @@ for switch in apActivePerSwitch:
       tmpRadioData1 = activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
       #we take Channel, EIRP, MaxEIRP an Clients and split it by /
       tmpRadioData2 = tmpRadioData1[2].split("/")
+      if DEBUG:
+        print("Radio 1 Band Ch/EIRP/MaxEIRP/Clients:")
+        print(activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"])
+        print("tmpRadioData1:")
+        print(tmpRadioData1)
+        print("tmpRadioData2:")
+        print(tmpRadioData2)
       #we save the data to the dich
       apData[activeAP["Name"]]["Radio0 channel"] = tmpRadioData2[0]
       apData[activeAP["Name"]]["Radio0 EIRP"] = tmpRadioData2[1]
