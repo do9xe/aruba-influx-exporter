@@ -108,9 +108,13 @@ for switch in apActivePerSwitch:
 
 for switch in radioDataPerSwitch:
   for thisRadio in radioDataPerSwitch[switch]["APs Radios information"]:
-    apData[thisRadio["Name"]]["Noise"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[0])
-    apData[thisRadio["Name"]]["Usage"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[1])
-    apData[thisRadio["Name"]]["Interference"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[2])
+    if DEBUG:
+      print("NF/U/I:")
+      print(thisRadio["NF/U/I"])
+    if thisRadio["NF/U/I"] is not None:
+      apData[thisRadio["Name"]]["Noise"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[0])
+      apData[thisRadio["Name"]]["Usage"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[1])
+      apData[thisRadio["Name"]]["Interference"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[2])
 
 
 json_body = []
