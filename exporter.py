@@ -51,15 +51,19 @@ for switch in apActivePerSwitch:
     #write the data for this radio to the dict
     #if the radio does not exsist in this dict it is supposed to be None
     if activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"] is not None:
-      #this contains the Data, but splitted by radio-mode, Band and the Rest
-      tmpRadioData1 = activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
-      #we take Channel, EIRP, MaxEIRP an Clients and split it by /
-      tmpRadioData2 = tmpRadioData1[2].split("/")
       if DEBUG:
         print("Radio 0 Band Ch/EIRP/MaxEIRP/Clients:")
         print(activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"])
+      
+      #this contains the Data, but splitted by radio-mode, Band and the Rest
+      tmpRadioData1 = activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
+      if DEBUG:
         print("tmpRadioData1:")
         print(tmpRadioData1)
+      
+      #we take Channel, EIRP, MaxEIRP an Clients and split it by /
+      tmpRadioData2 = tmpRadioData1[2].split("/")
+      if DEBUG:
         print("tmpRadioData2:")
         print(tmpRadioData2)
       #we save the data to the dich
@@ -75,15 +79,19 @@ for switch in apActivePerSwitch:
     #write the data for this radio to the dict
     #if the radio does not exsist in this dict it is supposed to be None
     if activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"] is not None:
-      #this contains the Data, but splitted by radio-mode, Band and the Rest
-      tmpRadioData1 = activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
-      #we take Channel, EIRP, MaxEIRP an Clients and split it by /
-      tmpRadioData2 = tmpRadioData1[2].split("/")
       if DEBUG:
         print("Radio 1 Band Ch/EIRP/MaxEIRP/Clients:")
         print(activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"])
+      
+      #this contains the Data, but splitted by radio-mode, Band and the Rest
+      tmpRadioData1 = activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
+      if DEBUG:
         print("tmpRadioData1:")
         print(tmpRadioData1)
+      
+      #we take Channel, EIRP, MaxEIRP an Clients and split it by /
+      tmpRadioData2 = tmpRadioData1[2].split("/")
+      if DEBUG:
         print("tmpRadioData2:")
         print(tmpRadioData2)
       #we save the data to the dich
