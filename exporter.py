@@ -60,7 +60,7 @@ for switch in apActivePerSwitch:
       apData[activeAP["Name"]]["Radio0 EIRP"] = tmpRadioData2[1]
       apData[activeAP["Name"]]["Radio0 MaxEIRP"] = tmpRadioData2[2]
       #if the radio is 2.4GHz, we add the clients to the counter
-      if tmpRadioData[1].startswith("2.4"):
+      if tmpRadioData1[1].startswith("2.4"):
         apData[activeAP["Name"]]["11g Clients"] += int(tmpRadioData2[3])
       #if it is 5GHz we add it to the 5GHz Counter
       else:
@@ -77,7 +77,7 @@ for switch in apActivePerSwitch:
       apData[activeAP["Name"]]["Radio0 EIRP"] = tmpRadioData2[1]
       apData[activeAP["Name"]]["Radio0 MaxEIRP"] = tmpRadioData2[2]
       #if the radio is 2.4GHz, we add the clients to the counter
-      if tmpRadioData[1].startswith("2.4"):
+      if tmpRadioData1[1].startswith("2.4"):
         apData[activeAP["Name"]]["11g Clients"] += int(tmpRadioData2[3])
       #if it is 5GHz we add it to the 5GHz Counter
       else:
