@@ -114,8 +114,7 @@ for switch in radioDataPerSwitch:
     if DEBUG:
       print("NF/U/I:")
       print(thisRadio["NF/U/I"])
-    if thisRadio["NF/U/I"] is not None:
-      if str(thisRadio["NF/U/I"]) is not "N/A":
+    if thisRadio["NF/U/I"].startswith("-")
         apData[thisRadio["Name"]]["Noise"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[0])
         apData[thisRadio["Name"]]["Usage"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[1])
         apData[thisRadio["Name"]]["Interference"+thisRadio["Band"]] = int(thisRadio["NF/U/I"].split("/")[2])
