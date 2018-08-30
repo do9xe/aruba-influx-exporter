@@ -9,7 +9,7 @@ apActivePerSwitch = {}
 radioDataPerSwitch = {}
 apData = {}
 
-MM = api_session(MM_IP, USER, PASSWORD, False)
+MM = api_session(MM_IP, USER, PASSWORD)
 MM.login()
 if DEBUG:
   print("requesting switch-data...")
@@ -136,7 +136,7 @@ for Name in apData:
 if DEBUG:
   print("pushing Data to influxDB")
 
-InfluxClient = InfluxDBClient(InfluxIp, InfluxPort, InfluxUser, InfluxPassword, InfluxDbName)
+InfluxClient = InfluxDBClient(InfluxIp, InfluxPort, InfluxUser, InfluxPassword, InfluxDbName,ssl=True,verify_ssl=True)
 InfluxClient.write_points(json_body)
 
 
