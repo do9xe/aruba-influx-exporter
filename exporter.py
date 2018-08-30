@@ -50,60 +50,63 @@ for switch in apActivePerSwitch:
   for activeAP in apActivePerSwitch[switch]["Active AP Table"]:
     #write the data for this radio to the dict
     #if the radio does not exsist in this dict it is supposed to be None
-    if activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].startswith("AP:") and is not None:
-      if DEBUG:
-        print("Radio 0 Band Ch/EIRP/MaxEIRP/Clients:")
-        print(activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"])
-      
-      #this contains the Data, but splitted by radio-mode, Band and the Rest
-      tmpRadioData1 = activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
-      if DEBUG:
-        print("tmpRadioData1:")
-        print(tmpRadioData1)
-      
-      #we take Channel, EIRP, MaxEIRP an Clients and split it by /
-      tmpRadioData2 = tmpRadioData1[2].split("/")
-      if DEBUG:
-        print("tmpRadioData2:")
-        print(tmpRadioData2)
-      #we save the data to the dich
-      apData[activeAP["Name"]]["Radio0 channel"] = tmpRadioData2[0]
-      apData[activeAP["Name"]]["Radio0 EIRP"] = tmpRadioData2[1]
-      apData[activeAP["Name"]]["Radio0 MaxEIRP"] = tmpRadioData2[2]
-      #if the radio is 2.4GHz, we add the clients to the counter
-      if tmpRadioData1[1].startswith("2.4") and tmpRadioData1[0].startswith("AP:") and is not None:
-        apData[activeAP["Name"]]["11g Clients"] += int(tmpRadioData2[3])
-      #if it is 5GHz we add it to the 5GHz Counter
-      elif tmpRadioData1[0].startswith("AP"):
-        apData[activeAP["Name"]]["11a Clients"] += int(tmpRadioData2[3])
-    #write the data for this radio to the dict
+    if activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"] is not None:
+      if activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].startswith("AP"):
+        if DEBUG:
+          print("Radio 0 Band Ch/EIRP/MaxEIRP/Clients:")
+          print(activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"])
+        
+        #this contains the Data, but splitted by radio-mode, Band and the Rest
+        tmpRadioData1 = activeAP["Radio 0 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
+        if DEBUG:
+          print("tmpRadioData1:")
+          print(tmpRadioData1)
+        
+        #we take Channel, EIRP, MaxEIRP an Clients and split it by /
+        tmpRadioData2 = tmpRadioData1[2].split("/")
+        if DEBUG:
+          print("tmpRadioData2:")
+          print(tmpRadioData2)
+        #we save the data to the dich
+        apData[activeAP["Name"]]["Radio0 channel"] = tmpRadioData2[0]
+        apData[activeAP["Name"]]["Radio0 EIRP"] = tmpRadioData2[1]
+        apData[activeAP["Name"]]["Radio0 MaxEIRP"] = tmpRadioData2[2]
+        #if the radio is 2.4GHz, we add the clients to the counter
+        if tmpRadioData1[1].startswith("2.4") and tmpRadioData1[0].startswith("AP"):
+          apData[activeAP["Name"]]["11g Clients"] += int(tmpRadioData2[3])
+        #if it is 5GHz we add it to the 5GHz Counter
+        elif tmpRadioData1[0].startswith("AP"):
+          apData[activeAP["Name"]]["11a Clients"] += int(tmpRadioData2[3])
+      #write the data for this radio to the dict
+    
     #if the radio does not exsist in this dict it is supposed to be None
-    if activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"].startswith("AP"):
-      if DEBUG:
-        print("Radio 1 Band Ch/EIRP/MaxEIRP/Clients:")
-        print(activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"])
-      
-      #this contains the Data, but splitted by radio-mode, Band and the Rest
-      tmpRadioData1 = activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
-      if DEBUG:
-        print("tmpRadioData1:")
-        print(tmpRadioData1)
-      
-      #we take Channel, EIRP, MaxEIRP an Clients and split it by /
-      tmpRadioData2 = tmpRadioData1[2].split("/")
-      if DEBUG:
-        print("tmpRadioData2:")
-        print(tmpRadioData2)
-      #we save the data to the dich
-      apData[activeAP["Name"]]["Radio1 channel"] = tmpRadioData2[0]
-      apData[activeAP["Name"]]["Radio1 EIRP"] = tmpRadioData2[1]
-      apData[activeAP["Name"]]["Radio1 MaxEIRP"] = tmpRadioData2[2]
-      #if the radio is 2.4GHz, we add the clients to the counter
-      if tmpRadioData1[1].startswith("2.4") and tmpRadioData1[0].startswith("AP"):
-        apData[activeAP["Name"]]["11g Clients"] += int(tmpRadioData2[3])
-      #if it is 5GHz we add it to the 5GHz Counter
-      elif tmpRadioData1[0].startswith("AP"):
-        apData[activeAP["Name"]]["11a Clients"] += int(tmpRadioData2[3])
+    if activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"] is not None:
+      if activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"].startswith("AP:"):
+        if DEBUG:
+          print("Radio 1 Band Ch/EIRP/MaxEIRP/Clients:")
+          print(activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"])
+        
+        #this contains the Data, but splitted by radio-mode, Band and the Rest
+        tmpRadioData1 = activeAP["Radio 1 Band Ch/EIRP/MaxEIRP/Clients"].split(":")
+        if DEBUG:
+          print("tmpRadioData1:")
+          print(tmpRadioData1)
+        
+        #we take Channel, EIRP, MaxEIRP an Clients and split it by /
+        tmpRadioData2 = tmpRadioData1[2].split("/")
+        if DEBUG:
+          print("tmpRadioData2:")
+          print(tmpRadioData2)
+        #we save the data to the dich
+        apData[activeAP["Name"]]["Radio1 channel"] = tmpRadioData2[0]
+        apData[activeAP["Name"]]["Radio1 EIRP"] = tmpRadioData2[1]
+        apData[activeAP["Name"]]["Radio1 MaxEIRP"] = tmpRadioData2[2]
+        #if the radio is 2.4GHz, we add the clients to the counter
+        if tmpRadioData1[1].startswith("2.4") and tmpRadioData1[0].startswith("AP"):
+          apData[activeAP["Name"]]["11g Clients"] += int(tmpRadioData2[3])
+        #if it is 5GHz we add it to the 5GHz Counter
+        elif tmpRadioData1[0].startswith("AP"):
+          apData[activeAP["Name"]]["11a Clients"] += int(tmpRadioData2[3])
 
 
 for switch in radioDataPerSwitch:
