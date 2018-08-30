@@ -23,7 +23,7 @@ if DEBUG:
   print("Goind through all the switches")
 for switch in switchList["All Switches"]:
   if switch["Model"] != "ArubaMM-VA" and switch["Status"] == "up":
-    tmpSession = api_session(switch["IP Address"], USER, PASSWORD, False)
+    tmpSession = api_session(switch["IP Address"], USER, PASSWORD)
     tmpSession.login()
     if DEBUG:
       print("requesting active APs from " + str(switch["IP Address"]))
