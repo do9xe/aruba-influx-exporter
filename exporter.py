@@ -24,7 +24,12 @@ if DEBUG:
 for switch in switchList["All Switches"]:
   if switch["Model"] != "ArubaMM-VA" and switch["Status"] == "up":
     tmpSession = api_session(switch["IP Address"], USER, PASSWORD)
-    tmpSession.login()
+    try:
+      tmpSession.login()
+    except Exception as e:
+      print(e)
+      continue
+      
     if DEBUG:
       print("requesting active APs from " + str(switch["IP Address"]))
     apActivePerSwitch[str(switch["IP Address"])] = tmpSession.cli_command("show ap active")
