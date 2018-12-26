@@ -164,5 +164,5 @@ json_body.append(globalStats)
 if DEBUG:
   print("pushing Data to influxDB")
 
-InfluxClient = InfluxDBClient(InfluxIp, InfluxPort, InfluxUser, InfluxPassword, InfluxDbName,ssl=False,verify_ssl=False)
+InfluxClient = InfluxDBClient(InfluxIp, InfluxPort, InfluxUser, InfluxPassword, InfluxDbName,ssl=CHECK_SSL,verify_ssl=CHECK_SSL)
 InfluxClient.write_points(json_body)
