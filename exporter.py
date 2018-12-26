@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-import json,requests
+import json,requests,pprint
 from aruba_api_caller.aruba_api_caller import *
 from config import *
 from influxdb import InfluxDBClient
 
-globalStats = {"Clients_count":{"total":0},"Clients_per_Band":{"11a":0,"11g":0}}
+globalStats = {"total_client_count":0,"Total_5GHz_clients":0,"Total_24GHz_clients":0}
 BandToFreq = {"1":"5GHz","2":"2.4GHz"}
 RadioTemplate = {"Channel":0,"Band":"","channel_busy":0,"Interference":0,"Noise":0,"EIRP":0,"Clients":0,"BSSID":"00:00:00:00:00:00"}
 bssidToAP = {}
@@ -58,7 +58,7 @@ for ap in apDatabase["AP Database"]:
   if apData[ap["Name"]]["Status"] == "Down":
     apData[ap["Name"]]["Status_bin"] = 0
   else:
-    apData[ap["Name"]]["Status_bin"] = 1 
+    apData[ap["Name"]]["Status_bin"] = 1
 
 ####################
 ##   Section 2.2  ##
@@ -78,35 +78,26 @@ for bssid in gsmBssidList["bss Channel Table"]:
 #we fetch the radio data from the BSSID-List with the BSS of the radios of each AP
 #this has to happen twice as the BSS have different indexes.
 for gsmAP in gsmAPList["ap Channel Table"]:
-  apData[gsmAP["ap_name"]]["radio0"] = RadioTemplate.copy()
-  apData[gsmAP["ap_name"]]["radio1"] = RadioTemplate.copy()
+  #apData[gsmAP["ap_name"]] = RadioTemplate.copy()
 
-  if gsmAP["ap_wifi0_bss"] is not "00:00:00:00:00:00":
-    try:
-      apData[gsmAP["ap_name"]]["radio0"] = {
-        "Channel":int(Bssid2radio[gsmAP["ap_wifi0_bss"]]["channel"]),
-        "Band":BandToFreq[Bssid2radio[gsmAP["ap_wifi0_bss"]]["radio_phy_type"]],
-        "channel_busy":int(Bssid2radio[gsmAP["ap_wifi0_bss"]]["rn_channel_busy"]),
-        "Interference":int(Bssid2radio[gsmAP["ap_wifi0_bss"]]["rn_interference"]),
-        "Noise":int(Bssid2radio[gsmAP["ap_wifi0_bss"]]["rn_noise_floor"]),
-        "BSSID":gsmAP["ap_wifi0_bss"],
-        "Clients":0
-      }
-    except:
-      pass
-  if gsmAP["ap_wifi1_bss"] is not "00:00:00:00:00:00":
-    try:
-      apData[gsmAP["ap_name"]]["radio1"] = {
-        "Channel":int(Bssid2radio[gsmAP["ap_wifi1_bss"]]["channel"]),
-        "Band":BandToFreq[Bssid2radio[gsmAP["ap_wifi1_bss"]]["radio_phy_type"]],
-        "channel_busy":int(Bssid2radio[gsmAP["ap_wifi1_bss"]]["rn_channel_busy"]),
-        "Interference":int(Bssid2radio[gsmAP["ap_wifi1_bss"]]["rn_interference"]),
-        "Noise":int(Bssid2radio[gsmAP["ap_wifi1_bss"]]["rn_noise_floor"]),
-        "BSSID":gsmAP["ap_wifi1_bss"],
-        "Clients":0
-      }
-    except:
-      pass
+  #try:
+    
+      apData[gsmAP["ap_name"]]["radio0_Channel"] = int(Bssid2radio[gsmAP["ap_wifi0_bss"]]["channel"])
+      apData[gsmAP["ap_name"]]["radio0_Band"] = BandToFreq[Bssid2radio[gsmAP["ap_wifi0_bss"]]["radio_phy_type"]]
+      apData[gsmAP["ap_name"]]["radio0_channel_busy"] = int(Bssid2radio[gsmAP["ap_wifi0_bss"]]["rn_channel_busy"])
+      apData[gsmAP["ap_name"]]["radio0_Interference"] = int(Bssid2radio[gsmAP["ap_wifi0_bss"]]["rn_interference"])
+      apData[gsmAP["ap_name"]]["radio0_Noise"] = int(Bssid2radio[gsmAP["ap_wifi0_bss"]]["rn_noise_floor"])
+      apData[gsmAP["ap_name"]]["radio0_BSSID"] = gsmAP["ap_wifi0_bss"]
+      apData[gsmAP["ap_name"]]["radio0_Clients"] = 0
+      apData[gsmAP["ap_name"]]["radio1_Channel"] = int(Bssid2radio[gsmAP["ap_wifi1_bss"]]["channel"])
+      apData[gsmAP["ap_name"]]["radio1_Band"] = BandToFreq[Bssid2radio[gsmAP["ap_wifi1_bss"]]["radio_phy_type"]]
+      apData[gsmAP["ap_name"]]["radio1_channel_busy"] = int(Bssid2radio[gsmAP["ap_wifi1_bss"]]["rn_channel_busy"])
+      apData[gsmAP["ap_name"]]["radio1_Interference"] = int(Bssid2radio[gsmAP["ap_wifi1_bss"]]["rn_interference"])
+      apData[gsmAP["ap_name"]]["radio1_Noise"] = int(Bssid2radio[gsmAP["ap_wifi1_bss"]]["rn_noise_floor"])
+      apData[gsmAP["ap_name"]]["radio1_BSSID"] = gsmAP["ap_wifi1_bss"]
+      apData[gsmAP["ap_name"]]["radio1_Clients"] = 0
+  #except:
+  #   pass
 
 ####################
 ##   Section 2.4  ##
@@ -115,33 +106,33 @@ for gsmAP in gsmAPList["ap Channel Table"]:
 for radio in radioDatabase["AP Radio Database"]:
   if radio["Radio 0 Mode/Chan/EIRP"] is not None:
     if radio["Radio 0 Mode/Chan/EIRP"].startswith("AP"):
-      apData[radio["Name"]]["radio0"]["EIRP"] = int(radio["Radio 0 Mode/Chan/EIRP"].split("/")[2].split(".")[0])
+      apData[radio["Name"]]["radio0_EIRP"] = int(radio["Radio 0 Mode/Chan/EIRP"].split("/")[2].split(".")[0])
   if radio["Radio 1 Mode/Chan/EIRP"] is not None:
     if radio["Radio 1 Mode/Chan/EIRP"].startswith("AP"):
-      apData[radio["Name"]]["radio1"]["EIRP"] = int(radio["Radio 1 Mode/Chan/EIRP"].split("/")[2].split(".")[0])
+      apData[radio["Name"]]["radio1_EIRP"] = int(radio["Radio 1 Mode/Chan/EIRP"].split("/")[2].split(".")[0])
 
 ####################
 ##   Section 2.5  ##
 ####################
 # Count the clients
 for sta in gsmSTAList["sta Channel Table"]:
-  globalStats["Clients_count"]["total"] += 1
+  globalStats["total_client_count"] += 1
   if sta["radio_phy_type"] == "1":
-    globalStats["Clients_per_Band"]["11a"] += 1
+    globalStats["Total_5GHz_clients"] += 1
   else:
-    globalStats["Clients_per_Band"]["11a"] += 1
+    globalStats["Total_24GHz_clients"] += 1
   try:
-    globalStats["Clients_count"][sta["essid"]] += 1
+    globalStats["Clients_ssid_"+sta["essid"]] += 1
   except:
-    globalStats["Clients_count"][sta["essid"]] = 1
+    globalStats["Clients_ssid_"+sta["essid"]] = 1
 
 
   thisAPname = Bssid2APname[sta["bssid"]]["ap_name"]
   if Bssid2APname[sta["bssid"]]["radio_phy_type"] == "2":
-    APradio = "radio1"
+    APradio = "radio1_Clients"
   else:
-    APradio = "radio0"
-  apData[thisAPname][APradio]["Clients"] += 1
+    APradio = "radio0_Clients"
+  apData[thisAPname][APradio] += 1
 
 ##################
 ##   Section 3  ##
@@ -159,7 +150,12 @@ for Name in apData:
                     "ap_type":data["AP Type"],
                     "status":data["Status"]
                   }})
-json_body.append(globalStats)
+json_body.append({
+                "measurement": "general_data",
+                "fields": globalStats,
+                "tags": {
+                "host": "all"
+                }})
 
 if DEBUG:
   print("pushing Data to influxDB")
