@@ -130,8 +130,16 @@ for sta in gsmSTAList["sta Channel Table"]:
   thisAPname = Bssid2APname[sta["bssid"]]["ap_name"]
   if Bssid2APname[sta["bssid"]]["radio_phy_type"] == "2":
     APradio = "radio1_Clients"
+    try:
+      globalStats["Clients_ssid_"+sta["essid"]+"_24GHz"] += 1
+    except:
+      globalStats["Clients_ssid_"+sta["essid"]+"_24GHz"] = 1
   else:
     APradio = "radio0_Clients"
+      try:
+      globalStats["Clients_ssid_"+sta["essid"]+"_5GHz"] += 1
+    except:
+      globalStats["Clients_ssid_"+sta["essid"]+"_5GHz"] = 1
   apData[thisAPname][APradio] += 1
 
 ##################
