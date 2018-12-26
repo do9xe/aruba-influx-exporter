@@ -136,7 +136,7 @@ for sta in gsmSTAList["sta Channel Table"]:
       globalStats["Clients_ssid_"+sta["essid"]+"_24GHz"] = 1
   else:
     APradio = "radio0_Clients"
-      try:
+    try:
       globalStats["Clients_ssid_"+sta["essid"]+"_5GHz"] += 1
     except:
       globalStats["Clients_ssid_"+sta["essid"]+"_5GHz"] = 1
