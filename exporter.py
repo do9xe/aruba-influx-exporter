@@ -17,23 +17,25 @@ bssidToAP = {}
 
 MM = api_session(MM_IP, USER, PASSWORD, check_ssl=CHECK_SSL)
 MM.login()
-#if DEBUG:
-#  print("requesting switch-data")
-#switchList = MM.cli_command("show switches")
 if DEBUG:
   print("requesting ap database")
 apDatabase = MM.cli_command("show ap database")
 if DEBUG:
   print("requesting ap database")
 radioDatabase = MM.cli_command("show ap radio-database")
-if DEBUG:
-  print("requesting data from the global shared memory")
 gsmAPList = MM.cli_command("show gsm debug channel ap")
 gsmRadioList = MM.cli_command("show gsm debug channel radio")
-gsmSTAList = MM.cli_command("show gsm debug channel sta")
 gsmBssidList = MM.cli_command("show gsm debug channel bss")
-
 MM.logout()
+
+if DEBUG:
+  print("requesting data from the global shared memory")
+
+MC = api_session(MC_IP, USER, PASSWORD, check_ssl=CHECK_SSL)
+MC.login()
+
+gsmSTAList = MC.cli_command("show gsm debug channel sta")
+MC.logout()
 
 
 ##################
