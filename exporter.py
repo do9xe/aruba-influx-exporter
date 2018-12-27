@@ -26,16 +26,15 @@ radioDatabase = MM.cli_command("show ap radio-database")
 gsmAPList = MM.cli_command("show gsm debug channel ap")
 gsmRadioList = MM.cli_command("show gsm debug channel radio")
 gsmBssidList = MM.cli_command("show gsm debug channel bss")
-gsmSTAList = MM.cli_command("show gsm debug channel sta")
 MM.logout()
 
 if DEBUG:
   print("requesting data from the global shared memory")
 
-#MC = api_session(MC_IP, USER, PASSWORD, check_ssl=CHECK_SSL)
-#MC.login()
-#
-#MC.logout()
+MC = api_session(MC_IP, USER, PASSWORD, check_ssl=CHECK_SSL)
+MC.login()
+gsmSTAList = MC.cli_command("show gsm debug channel cluster_sta")
+MC.logout()
 
 
 ##################
@@ -117,31 +116,32 @@ for radio in radioDatabase["AP Radio Database"]:
 ##   Section 2.5  ##
 ####################
 # Count the clients
-for sta in gsmSTAList["sta Channel Table"]:
+for sta in gsmSTAList["cluster_sta Channel Table"]:
+  this_bssid = sta["csta_bssid"].strip()
   globalStats["total_client_count"] += 1
-  if sta["radio_phy_type"] == "1":
+  if Bssid2APname[this_bssid]["radio_phy_type"] == "1":
     globalStats["Total_5GHz_clients"] += 1
   else:
     globalStats["Total_24GHz_clients"] += 1
   try:
-    globalStats["Clients_ssid_"+sta["essid"]] += 1
+    globalStats["Clients_ssid_"+ Bssid2APname[this_bssid]["essid"]] += 1
   except:
-    globalStats["Clients_ssid_"+sta["essid"]] = 1
+    globalStats["Clients_ssid_"+ Bssid2APname[this_bssid]["essid"]] = 1
 
 
-  thisAPname = Bssid2APname[sta["bssid"]]["ap_name"]
-  if Bssid2APname[sta["bssid"]]["radio_phy_type"] == "2":
+  thisAPname = Bssid2APname[sta["csta_bssid"]]["ap_name"]
+  if Bssid2APname[this_bssid]["radio_phy_type"] == "2":
     APradio = "radio1_Clients"
     try:
-      globalStats["Clients_ssid_"+sta["essid"]+"_24GHz"] += 1
+      globalStats["Clients_ssid_"+ Bssid2APname[this_bssid]["essid"]+"_24GHz"] += 1
     except:
-      globalStats["Clients_ssid_"+sta["essid"]+"_24GHz"] = 1
+      globalStats["Clients_ssid_"+ Bssid2APname[this_bssid]["essid"]+"_24GHz"] = 1
   else:
     APradio = "radio0_Clients"
     try:
-      globalStats["Clients_ssid_"+sta["essid"]+"_5GHz"] += 1
+      globalStats["Clients_ssid_"+ Bssid2APname[this_bssid]["essid"]+"_5GHz"] += 1
     except:
-      globalStats["Clients_ssid_"+sta["essid"]+"_5GHz"] = 1
+      globalStats["Clients_ssid_"+ Bssid2APname[this_bssid]["essid"]+"_5GHz"] = 1
   apData[thisAPname][APradio] += 1
 
 ##################
@@ -157,8 +157,7 @@ for Name in apData:
                   "tags": {
                     "host": data["Name"],
                     "group":data["Group"],
-                    "ap_type":data["AP Type"],
-                    "status":data["Status"]
+                    "ap_type":data["AP Type"]
                   }})
 json_body.append({
                 "measurement": "general_data",
