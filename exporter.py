@@ -26,16 +26,16 @@ radioDatabase = MM.cli_command("show ap radio-database")
 gsmAPList = MM.cli_command("show gsm debug channel ap")
 gsmRadioList = MM.cli_command("show gsm debug channel radio")
 gsmBssidList = MM.cli_command("show gsm debug channel bss")
+gsmSTAList = MM.cli_command("show gsm debug channel sta")
 MM.logout()
 
 if DEBUG:
   print("requesting data from the global shared memory")
 
-MC = api_session(MC_IP, USER, PASSWORD, check_ssl=CHECK_SSL)
-MC.login()
-
-gsmSTAList = MC.cli_command("show gsm debug channel sta")
-MC.logout()
+#MC = api_session(MC_IP, USER, PASSWORD, check_ssl=CHECK_SSL)
+#MC.login()
+#
+#MC.logout()
 
 
 ##################
